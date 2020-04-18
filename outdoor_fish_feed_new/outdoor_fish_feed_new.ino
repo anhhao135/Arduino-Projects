@@ -15,23 +15,14 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
-#define servo1_back 2
-#define servo2_back 2
-
-
+#define servo1_back 2 
 #define servo1_pin D1
-#define servo2_pin D2
-
-
 
 Servo servo1;
-Servo servo2;
-
-
-static PCD8544 lcd;
-
 
 void setup() {
+
+  Serial.begin(115200);
 
 
   WiFi.begin(ssid, password);
@@ -45,15 +36,7 @@ void setup() {
 
   pinMode(D5, OUTPUT);
 
-
-
-  delay(1000);
   feed(1);
-  delay(1000);
-  feed(2);
-
-  Serial.begin(9600);
-  
 
 
 }
@@ -76,6 +59,7 @@ void loop() {
       
   }
 
+  
   if(WiFi.status() == WL_CONNECTED){
 
   
@@ -85,69 +69,58 @@ void loop() {
   int minute = timeClient.getMinutes();
   int second = timeClient.getSeconds();
 
+  Serial.println(hour);
+  Serial.println(minute);
+  Serial.println(second);
+  Serial.println("--");
 
-  if(day == "Monday" && hour == 10 && minute == 10 && second == 10){
+ 
 
-    feed(1);
-    feed(2);
-
-  }
-
-  if(day == "Wednesday" && hour == 10 && minute == 10 && second == 10){
-
-    feed(1);
-    feed(2);
-
-  }
-
-
-  if(day == "Friday" && hour == 10 && minute == 10 && second == 10){
+  if(day == "Tuesday" && hour == 13 && minute == 30 && second == 0){
 
     feed(1);
-    feed(2);
-
   }
+
+  if(day == "Friday" && hour == 13 && minute == 30 && second == 0){
+
+    feed(1);
+  }
+
+  if(day == "Saturday" && hour == 13 && minute == 30 && second == 0){
+
+    feed(1);
+  }
+
   
   digitalWrite(D5, HIGH);   // Turn the LED on by making the voltage LOW
-  delay(400);                      // Wait for a second
-  digitalWrite(D5 , LOW);
   delay(400);
-  // Turn the LED off by making the voltage HIGH
-
-
-Serial.print(hour);
-Serial.print(minute);
-Serial.print(second);
-Serial.println("");
- 
+  Serial.println("LED");
+  // Wait for a second
+  digitalWrite(D5, LOW);  // Turn the LED off by making the voltage HIGH
+  delay(400);
   
 
 }
 
+
 }
+
 
 
 void feed(int servo_num){
 
+
+for (int i = 0; i<2; i++){
   if(servo_num==1){
     servo1.attach(servo1_pin);
-    servo1.write(servo1_back);
-    delay(1000);
-    servo1.write(servo1_back + 20);
+    servo1.write(servo1_back + 50);
     delay(1000);
     servo1.write(servo1_back);
+    delay(1000);
+    servo1.write(servo1_back + 50);
     delay(1000);
     servo1.detach();
+   }
   }
 
-  if(servo_num==2){
-    servo2.attach(servo2_pin);
-    servo2.write(servo2_back);
-    delay(1000);
-    servo2.write(servo2_back + 20);
-    delay(1000);
-    servo2.write(servo2_back);
-    delay(1000);
-    servo2.detach();
-  }
-  }
+}

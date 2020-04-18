@@ -15,10 +15,10 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
-#define servo1_back 39 
+#define servo1_back 2 
 #define servo1_pin D1
 
-Servo servo1;
+
 
 void setup() {
 
@@ -35,78 +35,34 @@ void setup() {
   timeClient.begin();
 
   pinMode(D5, OUTPUT);
+
+
 }
 
 void loop() {
 
-  if(WiFi.status() != WL_CONNECTED){
-      WiFi.begin(ssid, password);
-  }
-
-  if(WiFi.status() == WL_CONNECTED){
-
-  
-  timeClient.update();
-  String day = daysOfTheWeek[timeClient.getDay()];
-  int hour = timeClient.getHours();
-  int minute = timeClient.getMinutes();
-  int second = timeClient.getSeconds();
-
-  Serial.println(hour);
-  Serial.println(minute);
-  Serial.println(second);
-  Serial.println("--");
-
-  
-
-
-  if(day == "Tuesday" && hour == 13 && minute == 30 && second == 0){
-
-    feed(1);
-  }
-
-  if(day == "Friday" && hour == 13 && minute == 30 && second == 0){
-
-    feed(1);
-  }
-
-  if(day == "Sunday" && hour == 13 && minute == 30 && second == 0){
-
-    feed(1);
-  }
-  
-
-  
-  digitalWrite(D5, HIGH);   // Turn the LED on by making the voltage LOW
-  delay(500);
-  Serial.println("LED");
-  // Wait for a second
-  digitalWrite(D5, LOW);  // Turn the LED off by making the voltage HIGH
-  delay(500);
-  
-
-}
-
 
 
 }
 
 
-
+/*
 void feed(int servo_num){
 
 
 for (int i = 0; i<2; i++){
   if(servo_num==1){
     servo1.attach(servo1_pin);
-    servo1.write(servo1_back + 20);
+    servo1.write(servo1_back + 50bj);
     delay(1000);
     servo1.write(servo1_back);
     delay(1000);
-    servo1.write(servo1_back + 20);
+    servo1.write(servo1_back + 50);
     delay(1000);
     servo1.detach();
    }
   }
 
 }
+
+*/
