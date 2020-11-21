@@ -40,7 +40,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 // our servo # counter
 uint8_t servonum = 0;
 String inData;
-int numberOfServos = 3;
+int numberOfServos = 12;
 
 #define switchPin A1 
 #define potPin A0
@@ -91,15 +91,22 @@ void setServoPulse(uint8_t n, double pulse) {
 
 void loop() {
 
+  
+
   for (int i = 0; i < numberOfServos; i++){
     Serial.println(i);
-    while (!digitalRead(switchPin) == 0){
+    while (digitalRead(switchPin) == 0){
       pwm.setPWM(i, 0, analogRead(potPin));
     }
     String printLine = "servo" + String(i) + " " + analogRead(potPin);
     Serial.println(printLine);
     delay(1000);
   }
+
+  
+
+  //Serial.println(digitalRead(switchPin));
+  //Serial.println(analogRead(potPin));
   
 
 

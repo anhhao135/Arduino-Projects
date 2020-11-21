@@ -40,14 +40,14 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 // our servo # counter
 uint8_t servonum = 0;
 String inData;
-int numberOfServos = 3;
+int numberOfServos = 12;
 
 #define switchPin A1 
 #define potPin A0
 
-float scaleFactor = 2;
-int calibrationArray[] = {294, 222, 346};
-int inverseArray[] = {-1, 1, -1};
+float scaleFactor = 2.3;
+int calibrationArray[] = {339, 243, 169, 205, 300, 365, 300, 295, 160, 164, 288, 350};
+//int inverseArray[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 
 void setup() {
@@ -58,6 +58,10 @@ void setup() {
   pwm.setPWMFreq(SERVO_FREQ);  // Analog servos run at ~50 Hz updates
 
   delay(10);
+
+  for (int i = 0; i < numberOfServos; i++){
+    pwm.setPWM(i, 0, calibrationArray[i]);
+  }
 }
 
 // You can use this function if you'd like to set the pulse length in seconds
@@ -78,23 +82,42 @@ void setServoPulse(uint8_t n, double pulse) {
 
 void loop() {
 
-while (Serial.available() > 0)
-    {
-      String dataGot = Serial.readStringUntil('%');
-      Serial.println(dataGot);
-      
-      for (int i = 0; i < numberOfServos; i++){
-        int localAngle = getValue(dataGot, '&', i).toInt();
-        int absoluteAngle = calibrationArray[i] + ((int)(localAngle * scaleFactor)) * inverseArray[i];
-        Serial.println(absoluteAngle);
-        pwm.setPWM(i, 0, absoluteAngle);
-       
-      }
-      
-      serialFlush();
-      
-    }
+
+if (Serial.available() > 0){
+    String dataGot = Serial.readStringUntil('%');
+    //Serial.println(dataGot);
+  //Serial.println(dataGot);
+  
+  for (int i = 0; i < numberOfServos; i++){
+    int localAngle = getValue(dataGot, '&', i).toInt();
+    int absoluteAngle = calibrationArray[i] + ((int)(localAngle * scaleFactor));
+    //Serial.println(absoluteAngle);
+    pwm.setPWM(i, 0, absoluteAngle);
+   
+  }
+  
+  //serialFlush();
 }
+
+//serialFlush();
+
+  
+
+/*
+  for (int i = 0; i < numberOfServos; i++){
+    int localAngle = sin(0.002 * millis()) * 70;
+    int absoluteAngle = calibrationArray[i] + ((int)(localAngle * scaleFactor));
+    //Serial.println(absoluteAngle);
+    pwm.setPWM(i, 0, absoluteAngle);
+   
+  }
+
+  */
+
+}
+
+
+
 
 
 
