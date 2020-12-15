@@ -16,7 +16,7 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 
 #define servo1_back 2 
-#define servo1_pin D1
+#define servo1_pin 5
 
 Servo servo1;
 
@@ -34,14 +34,17 @@ void setup() {
 
   timeClient.begin();
 
-  pinMode(D5, OUTPUT);
-
-  feed(1);
+  pinMode(servo1_pin, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
 
 
 }
 
 void loop() {
+
+
+  
+  
 
   if(WiFi.status() != WL_CONNECTED){
 
@@ -51,9 +54,9 @@ void loop() {
 
 
   while(WiFi.status() != WL_CONNECTED){
-  digitalWrite(D5, HIGH);   // Turn the LED on by making the voltage LOW
+  digitalWrite(LED_BUILTIN, HIGH);   // Turn the LED on by making the voltage LOW
   delay(100);                      // Wait for a second
-  digitalWrite(D5 , LOW);
+  digitalWrite(LED_BUILTIN , LOW);
   delay(100);
   }
       
@@ -86,21 +89,23 @@ void loop() {
     feed(1);
   }
 
-  if(day == "Saturday" && hour == 13 && minute == 30 && second == 0){
-
-    feed(1);
-  }
-
   
-  digitalWrite(D5, HIGH);   // Turn the LED on by making the voltage LOW
+  digitalWrite(LED_BUILTIN, HIGH);   // Turn the LED on by making the voltage LOW
   delay(400);
   Serial.println("LED");
   // Wait for a second
-  digitalWrite(D5, LOW);  // Turn the LED off by making the voltage HIGH
+  digitalWrite(LED_BUILTIN, LOW);  // Turn the LED off by making the voltage HIGH
   delay(400);
   
 
 }
+
+
+
+
+
+
+
 
 
 }
@@ -110,7 +115,7 @@ void loop() {
 void feed(int servo_num){
 
 
-for (int i = 0; i<2; i++){
+for (int i = 0; i<1; i++){
   if(servo_num==1){
     servo1.attach(servo1_pin);
     servo1.write(servo1_back + 50);
